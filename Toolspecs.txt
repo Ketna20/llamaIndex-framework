@@ -1,0 +1,27 @@
+# Install Google Toolspecs
+pip install llama-index-tools-google
+
+#load the toolspec and convert it to a list of tools
+from llama_index.tools.google import GmailToolSpec
+
+tool_spec = GmailToolSpec()
+tool_spec_list = tool_spec.to_tool_list()
+
+#To get a more detailed view of the tools, we can take a look at the metadata of each tool
+[(tool.metadata.name, tool.metadata.description) for tool in tool_spec_list]
+
+#LlamaIndex also allows using MCP tools through a ToolSpec on the LlamaHub
+#Install the MCP Toolspec
+pip install llama-index-tools-mcp
+
+from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
+
+# We consider there is a mcp server running on 127.0.0.1:8000, or you can use the mcp client to connect to your own mcp server.
+mcp_client = BasicMCPClient("http://127.0.0.1:8000/sse")
+mcp_tool = McpToolSpec(client=mcp_client)
+
+# get the agent
+agent = await get_agent(mcp_tool)
+
+# create the agent context
+agent_context = Context(agent)
