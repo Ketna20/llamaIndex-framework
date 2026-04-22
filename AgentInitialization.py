@@ -15,3 +15,14 @@ agent = AgentWorkflow.from_tools_or_functions(
     [FunctionTool.from_defaults(multiply)],
     llm=llm
 )
+
+# stateless
+response = await agent.run("What is 2 times 2?")
+
+# remembering state
+from llama_index.core.workflow import Context
+
+ctx = Context(agent)
+
+response = await agent.run("My name is Bob.", ctx=ctx)
+response = await agent.run("What was my name again?", ctx=ctx)
